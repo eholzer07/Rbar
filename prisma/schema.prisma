@@ -11,8 +11,405 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-// Placeholder model — validates DB connectivity before full schema design in Chunk 2
-model HealthCheck {
-  id        Int      @id @default(autoincrement())
+// ---------------------------------------------------------------------------
+// Enums
+// ---------------------------------------------------------------------------
+
+enum Sport {
+  AMERICAN_FOOTBALL
+  BASKETBALL
+  BASEBALL
+  HOCKEY
+  SOCCER
+}
+
+enum VenueStatus {
+  ACTIVE
+  INACTIVE
+  PENDING_REVIEW
+}
+
+enum WatchEventVisibility {
+  PUBLIC
+  PRIVATE
+}
+
+enum RsvpStatus {
+  GOING
+  INTERESTED
+  NOT_GOING
+}
+
+enum ClaimStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum RecommendationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+// ---------------------------------------------------------------------------
+// Auth.js v5 adapter tables
+// ---------------------------------------------------------------------------
+
+model Account {
+  id                String  @id @default(uuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(uuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// ---------------------------------------------------------------------------
+// User
+// ---------------------------------------------------------------------------
+
+model User {
+  id            String    @id @default(uuid())
+  email         String    @unique
+  passwordHash  String?
+  name          String?
+  username      String?   @unique
+  avatarUrl     String?
+  bio           String?
+  homeCity      String?
+  emailVerified DateTime?
+  role          UserRole  @default(USER)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts               Account[]
+  sessions               Session[]
+  favoriteTeams          UserFavoriteTeam[]
+  watchEventsCreated     WatchEvent[]
+  watchEventAttendances  WatchEventAttendee[]
+  reviews                Review[]
+  recommendations        VenueRecommendation[] @relation("SubmittedRecommendations")
+  recommendationsReviewed VenueRecommendation[] @relation("ReviewedRecommendations")
+  ownerClaims            VenueOwnerClaim[]     @relation("ClaimedVenues")
+  ownerClaimsReviewed    VenueOwnerClaim[]     @relation("ReviewedClaims")
+  ownedVenues            Venue[]
+  uploadedPhotos         VenuePhoto[]
+  followers              Follow[]              @relation("Following")
+  following              Follow[]              @relation("Follower")
+}
+
+// ---------------------------------------------------------------------------
+// League & Team
+// ---------------------------------------------------------------------------
+
+model League {
+  id         String   @id @default(uuid())
+  name       String
+  shortName  String
+  sport      Sport
+  country    String   @default("US")
+  logoUrl    String?
+  externalId String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  teams Team[]
+  games Game[]
+}
+
+model Team {
+  id             String   @id @default(uuid())
+  name           String
+  city           String
+  abbreviation   String
+  leagueId       String
+  sport          Sport
+  logoUrl        String?
+  primaryColor   String?
+  secondaryColor String?
+  externalId     String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  league               League                 @relation(fields: [leagueId], references: [id])
+  homeGames            Game[]                 @relation("HomeTeam")
+  awayGames            Game[]                 @relation("AwayTeam")
+  userFavorites        UserFavoriteTeam[]
+  venueTeams           VenueTeam[]
+  recommendationTeams  VenueRecommendationTeam[]
+}
+
+model UserFavoriteTeam {
+  id        String   @id @default(uuid())
+  userId    String
+  teamId    String
   createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  team Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, teamId])
+}
+
+// ---------------------------------------------------------------------------
+// Venue
+// ---------------------------------------------------------------------------
+
+model Venue {
+  id            String      @id @default(uuid())
+  name          String
+  slug          String      @unique
+  address       String
+  city          String
+  state         String
+  zip           String?
+  lat           Decimal
+  lng           Decimal
+  location      Unsupported("geography(Point, 4326)")?
+  phone         String?
+  website       String?
+  googlePlaceId String?
+  status        VenueStatus @default(ACTIVE)
+  description   String?
+  ownerId       String?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  owner              User?                 @relation(fields: [ownerId], references: [id])
+  venueTeams         VenueTeam[]
+  watchEvents        WatchEvent[]
+  reviews            Review[]
+  ownerClaims        VenueOwnerClaim[]
+  approvedFromRec    VenueRecommendation[]
+  photos             VenuePhoto[]
+
+  @@index([status])
+}
+
+model VenuePhoto {
+  id           String   @id @default(uuid())
+  venueId      String
+  url          String
+  caption      String?
+  uploadedById String?
+  createdAt    DateTime @default(now())
+
+  venue      Venue  @relation(fields: [venueId], references: [id], onDelete: Cascade)
+  uploadedBy User?  @relation(fields: [uploadedById], references: [id])
+}
+
+model VenueTeam {
+  id          String   @id @default(uuid())
+  venueId     String
+  teamId      String
+  isConfirmed Boolean  @default(false)
+  notes       String?
+  createdAt   DateTime @default(now())
+
+  venue Venue @relation(fields: [venueId], references: [id], onDelete: Cascade)
+  team  Team  @relation(fields: [teamId], references: [id], onDelete: Cascade)
+
+  @@unique([venueId, teamId])
+}
+
+// ---------------------------------------------------------------------------
+// Game
+// ---------------------------------------------------------------------------
+
+model Game {
+  id                String   @id @default(uuid())
+  leagueId          String
+  homeTeamId        String
+  awayTeamId        String
+  startTime         DateTime
+  season            String
+  week              Int?
+  broadcastChannels String[]
+  homeScore         Int?
+  awayScore         Int?
+  isCompleted       Boolean  @default(false)
+  externalId        String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  league   League @relation(fields: [leagueId], references: [id])
+  homeTeam Team   @relation("HomeTeam", fields: [homeTeamId], references: [id])
+  awayTeam Team   @relation("AwayTeam", fields: [awayTeamId], references: [id])
+
+  watchEvents WatchEvent[]
+  reviews     Review[]
+
+  @@index([startTime])
+  @@index([leagueId, startTime])
+}
+
+// ---------------------------------------------------------------------------
+// Watch Events & Check-Ins
+// ---------------------------------------------------------------------------
+
+model WatchEvent {
+  id          String               @id @default(uuid())
+  title       String?
+  gameId      String
+  venueId     String
+  createdById String
+  visibility  WatchEventVisibility @default(PUBLIC)
+  description String?
+  createdAt   DateTime             @default(now())
+  updatedAt   DateTime             @updatedAt
+
+  game      Game                 @relation(fields: [gameId], references: [id])
+  venue     Venue                @relation(fields: [venueId], references: [id])
+  createdBy User                 @relation(fields: [createdById], references: [id])
+  attendees WatchEventAttendee[]
+}
+
+model WatchEventAttendee {
+  id           String     @id @default(uuid())
+  watchEventId String
+  userId       String
+  status       RsvpStatus
+  checkedInAt  DateTime?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  watchEvent WatchEvent @relation(fields: [watchEventId], references: [id], onDelete: Cascade)
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([watchEventId, userId])
+}
+
+// ---------------------------------------------------------------------------
+// Reviews
+// ---------------------------------------------------------------------------
+
+model Review {
+  id           String   @id @default(uuid())
+  venueId      String
+  userId       String
+  gameId       String?
+  showedGame   Boolean?
+  tvCount      Int?
+  soundOn      Boolean?
+  foodRating   Int?
+  drinkRating  Int?
+  valueRating  Int?
+  overallRating Int
+  comment      String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  venue Venue  @relation(fields: [venueId], references: [id], onDelete: Cascade)
+  user  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  game  Game?  @relation(fields: [gameId], references: [id])
+
+  @@unique([venueId, userId, gameId])
+}
+
+// ---------------------------------------------------------------------------
+// Venue Recommendations
+// ---------------------------------------------------------------------------
+
+model VenueRecommendation {
+  id               String               @id @default(uuid())
+  name             String
+  address          String
+  city             String
+  state            String
+  phone            String?
+  website          String?
+  description      String?
+  submittedById    String?
+  status           RecommendationStatus @default(PENDING)
+  reviewedById     String?
+  reviewedAt       DateTime?
+  rejectionReason  String?
+  approvedVenueId  String?
+  createdAt        DateTime             @default(now())
+  updatedAt        DateTime             @updatedAt
+
+  submittedBy  User?                    @relation("SubmittedRecommendations", fields: [submittedById], references: [id])
+  reviewedBy   User?                    @relation("ReviewedRecommendations", fields: [reviewedById], references: [id])
+  approvedVenue Venue?                  @relation(fields: [approvedVenueId], references: [id])
+  teams        VenueRecommendationTeam[]
+}
+
+model VenueRecommendationTeam {
+  recommendationId String
+  teamId           String
+
+  recommendation VenueRecommendation @relation(fields: [recommendationId], references: [id], onDelete: Cascade)
+  team           Team                @relation(fields: [teamId], references: [id], onDelete: Cascade)
+
+  @@id([recommendationId, teamId])
+}
+
+// ---------------------------------------------------------------------------
+// Venue Owner Claims
+// ---------------------------------------------------------------------------
+
+model VenueOwnerClaim {
+  id              String      @id @default(uuid())
+  venueId         String
+  userId          String
+  status          ClaimStatus @default(PENDING)
+  message         String?
+  reviewedById    String?
+  reviewedAt      DateTime?
+  rejectionReason String?
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  venue      Venue  @relation(fields: [venueId], references: [id], onDelete: Cascade)
+  user       User   @relation("ClaimedVenues", fields: [userId], references: [id], onDelete: Cascade)
+  reviewedBy User?  @relation("ReviewedClaims", fields: [reviewedById], references: [id])
+}
+
+// ---------------------------------------------------------------------------
+// Social: Follow
+// ---------------------------------------------------------------------------
+
+model Follow {
+  id          String   @id @default(uuid())
+  followerId  String
+  followingId String
+  createdAt   DateTime @default(now())
+
+  follower  User @relation("Follower", fields: [followerId], references: [id], onDelete: Cascade)
+  following User @relation("Following", fields: [followingId], references: [id], onDelete: Cascade)
+
+  @@unique([followerId, followingId])
 }
