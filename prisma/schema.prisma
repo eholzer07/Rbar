@@ -57,6 +57,11 @@ enum UserRole {
   ADMIN
 }
 
+enum NotificationType {
+  FOLLOW
+  WATCH_EVENT_RSVP
+}
+
 // ---------------------------------------------------------------------------
 // Auth.js v5 adapter tables
 // ---------------------------------------------------------------------------
@@ -129,6 +134,7 @@ model User {
   uploadedPhotos         VenuePhoto[]
   followers              Follow[]              @relation("Following")
   following              Follow[]              @relation("Follower")
+  notifications          Notification[]
 }
 
 // ---------------------------------------------------------------------------
@@ -412,4 +418,24 @@ model Follow {
   following User @relation("Following", fields: [followingId], references: [id], onDelete: Cascade)
 
   @@unique([followerId, followingId])
+}
+
+// ---------------------------------------------------------------------------
+// Notifications
+// ---------------------------------------------------------------------------
+
+model Notification {
+  id           String           @id @default(uuid())
+  userId       String
+  type         NotificationType
+  title        String
+  body         String?
+  isRead       Boolean          @default(false)
+  referenceUrl String?
+  createdAt    DateTime         @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, isRead])
+  @@index([userId, createdAt])
 }

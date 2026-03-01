@@ -257,17 +257,23 @@ Let fans find each other and coordinate around shared teams.
 
 ---
 
-### Chunk 12 — Notifications & Alerts
+### Chunk 12 — Notifications & Alerts ✅ COMPLETE (2026-03-01)
 Keep users informed without requiring them to open the app.
 
-- **Game day reminders** — notify users with upcoming games for their favorite teams (day-of + 1 hour before)
-- **Venue found** — notify when a new venue is added for their team in their area
-- **Event invitations** — notify when invited to a watch event
-- **Check-in prompt** — when user is near a venue during a game window (requires location permission)
-- **Post-game review prompt** — after game ends for checked-in users
-- **Submission status** — notify user when their venue recommendation is approved/rejected
+**Delivered — in-app notification system:**
+- `prisma/schema.prisma` — `NotificationType` enum (FOLLOW, WATCH_EVENT_RSVP) + `Notification` model; migration: `20260301000001_add_notification`
+- `src/components/notification-bell.tsx` — server component showing unread count badge in nav; returns null for logged-out users
+- `src/app/notifications/page.tsx` — notification list, auto-marks all as read on visit, type icons, linked items
+- `src/middleware.ts` — `/notifications` added to protected paths
+- `src/app/users/[username]/actions.ts` — `followAction` creates FOLLOW notification (dedup: only on new follow)
+- `src/app/watch-events/[id]/actions.ts` — `rsvpAction` creates WATCH_EVENT_RSVP notification (dedup: only when first becoming GOING)
 
-Email notifications at launch; push notifications designed for future mobile integration.
+**Deferred:**
+- Email notifications (needs email provider — Chunk 5a)
+- Game day reminders (needs cron/scheduler — Chunk 16)
+- Push notifications (Chunk 17 / mobile)
+- Check-in proximity prompt (browser geolocation)
+- Venue found / Submission status notifications (triggered from admin actions — Chunk 13)
 
 ---
 
@@ -371,7 +377,7 @@ At project completion, the following must be true:
 
 *Plan created: 2026-02-27*
 *Last updated: 2026-03-01*
-*Status: Chunk 11 complete — next up: Chunk 12 (Notifications & Alerts)*
+*Status: Chunk 12 complete — next up: Chunk 13 (Admin Panel)*
 
 ---
 
@@ -390,4 +396,5 @@ At project completion, the following must be true:
 | 9 — Watch Events & Check-Ins | ✅ Complete | 2026-03-01 | /watch-events/new, /watch-events/[id], RSVP, check-in window, dashboard section |
 | 10 — Feedback & Reviews | ✅ Complete | 2026-03-01 | /review form, post-game prompt on watch event page, enhanced review cards on venue page |
 | 11 — Social Features & Fan Connections | ✅ Complete | 2026-03-01 | Follow/unfollow, /users/[username] profile, /feed activity feed, dashboard Friends' Activity |
-| 12–16 | Pending | — | — |
+| 12 — Notifications & Alerts | ✅ Complete | 2026-03-01 | Notification model, bell badge in nav, /notifications page, FOLLOW + RSVP triggers |
+| 13–16 | Pending | — | — |

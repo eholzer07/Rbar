@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import Link from "next/link";
 import "./globals.css";
 import { Providers } from "@/components/providers";
+import NotificationBell from "@/components/notification-bell";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,6 +36,7 @@ export default function RootLayout({
             <Link href="/search" className="hover:text-neutral-900 dark:hover:text-white">Search</Link>
             <Link href="/teams" className="hover:text-neutral-900 dark:hover:text-white">My Teams</Link>
             <Link href="/feed" className="hover:text-neutral-900 dark:hover:text-white">Feed</Link>
+            <NotificationBell />
             <Link href="/profile" className="hover:text-neutral-900 dark:hover:text-white">Profile</Link>
           </nav>
         </header>
