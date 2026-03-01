@@ -90,20 +90,17 @@ NFL, NBA, MLB, NHL, MLS, NCAAF, NCAAB, Premier League, Champions League (expanda
 
 ---
 
-### Chunk 4 — Venue Data Seeding (Research Sub-Project)
-The chicken-and-egg problem: the app has no value without venue data. This chunk builds the initial dataset and the admin tools to manage it.
+### Chunk 4 — Venue Data Seeding (Research Sub-Project) ✅ COMPLETE
+The chicken-and-egg problem: the app has no value without venue data.
 
-- Build internal Admin Panel (basic) for venue data entry
-- Research and compile initial venue list per team from public internet sources:
-  - Official team supporter group locations ("official bars")
-  - Known sports bar chains
-  - Reddit/Facebook fan community posts
-  - Team websites that list watch parties
-- Normalize venue data (address → geocoordinates via Google Geocoding API)
-- Import and validate initial dataset
-- Define ongoing data governance process (how venues get added, updated, removed)
-
-This is a research + data entry project, not just a development task.
+**Actual approach (differs from original plan):**
+- No admin UI — seed script only (`scripts/seed-venues.ts`)
+- Pilot cities: Chicago + NYC (18 venues each)
+- Geocoding: Nominatim (OpenStreetMap) — free, no key — instead of Google Geocoding API
+- Venue source files: `data/venues/chicago.json`, `data/venues/nyc.json`
+- Seed is idempotent (upsert by name+city); add more cities by dropping a new JSON file and re-running
+- 36 venues seeded, 119 VenueTeam links, all rows have PostGIS `location` point
+- `npm run seed:venues` script added
 
 ---
 
@@ -316,4 +313,17 @@ At project completion, the following must be true:
 ---
 
 *Plan created: 2026-02-27*
-*Status: In planning — no development started*
+*Last updated: 2026-03-01*
+*Status: Chunk 4 complete — next up: Chunk 5 (Authentication & User Profiles)*
+
+---
+
+## Chunk Completion Log
+
+| Chunk | Status | Completed | Notes |
+|---|---|---|---|
+| 1 — Project Setup & Infrastructure | ✅ Complete | 2026-02-28 | Next.js 15, Tailwind v4, shadcn/ui, Prisma + PostGIS, Docker dev DB |
+| 2 — Database Schema Design | ✅ Complete | 2026-02-28 | Full schema, migrations, seed |
+| 3 — Sports Data Integration | ✅ Complete | 2026-02-28 | TheSportsDB free tier; 5 leagues, 49 teams with logos |
+| 4 — Venue Data Seeding | ✅ Complete | 2026-03-01 | 36 venues (Chicago + NYC), Nominatim geocoding, 119 VenueTeam links |
+| 5–16 | Pending | — | — |
