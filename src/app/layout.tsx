@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import Link from "next/link";
 import "./globals.css";
 import { Providers } from "@/components/providers";
 
@@ -28,6 +29,14 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <header className="sticky top-0 z-50 flex h-16 items-center border-b border-neutral-200 bg-white px-4 gap-6 dark:border-neutral-800 dark:bg-neutral-950">
+          <Link href="/" className="font-bold text-neutral-900 dark:text-white">Rbar</Link>
+          <nav className="flex gap-4 text-sm text-neutral-600 dark:text-neutral-400">
+            <Link href="/search" className="hover:text-neutral-900 dark:hover:text-white">Search</Link>
+            <Link href="/teams" className="hover:text-neutral-900 dark:hover:text-white">My Teams</Link>
+            <Link href="/profile" className="hover:text-neutral-900 dark:hover:text-white">Profile</Link>
+          </nav>
+        </header>
         <Providers>{children}</Providers>
       </body>
     </html>

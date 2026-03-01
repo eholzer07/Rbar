@@ -149,7 +149,7 @@ Give users a home screen that shows them what matters to them.
 
 ---
 
-### Chunk 7 — Venue Search & Discovery
+### Chunk 7 — Venue Search & Discovery ✅ COMPLETE (2026-03-01)
 The core search experience — find a bar near me for my team's game.
 
 - Location input (browser geolocation or manual city/zip entry)
@@ -164,6 +164,19 @@ The core search experience — find a bar near me for my team's game.
   - Aggregate review scores
   - Active watch events at this venue
   - Past reviews
+
+**Delivered:**
+- `npm install leaflet react-leaflet @types/leaflet` — free OSM maps (no API key)
+- `geocodeQuery()` in `src/lib/geocoding.ts` — free-text → lat/lng via Nominatim
+- `/api/geocode` — city/zip/address → lat/lng proxy route (no auth required)
+- `/api/venues/search` — PostGIS radius search with optional teamId filter; returns lat/lng as float8, teams, avg rating
+- `src/components/venue-map.tsx` — react-leaflet map (SSR disabled), marker icons, popup with venue info
+- `src/components/venue-search.tsx` — split-screen search UI (list left 40%, map right 60%); geolocation + city input, team filter, radius buttons
+- `src/app/search/page.tsx` — auth-guarded server page; passes team list to VenueSearch
+- `src/app/venues/[slug]/page.tsx` — public venue detail page; all sections with graceful empty states
+- `src/app/layout.tsx` — added global sticky nav header (Rbar, Search, My Teams, Profile)
+- Middleware updated to protect `/search`
+- `tsc --noEmit` and `npm run lint` both pass with 0 errors
 
 ---
 

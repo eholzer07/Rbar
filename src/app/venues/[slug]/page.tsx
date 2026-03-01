@@ -1,0 +1,254 @@
+import { notFound } from "next/navigation"
+import Link from "next/link"
+import { db } from "@/lib/db"
+
+type Props = { params: Promise<{ slug: string }> }
+
+export default async function VenuePage({ params }: Props) {
+  const { slug } = await params
+
+  const venue = await db.venue.findUnique({
+    where: { slug },
+    include: {
+      venueTeams: { include: { team: { include: { league: true } } } },
+      photos: { take: 8 },
+      reviews: {
+        take: 10,
+        orderBy: { createdAt: "desc" },
+        include: { user: { select: { name: true } } },
+      },
+    },
+  })
+
+  if (!venue) notFound()
+
+  const teamIds = venue.venueTeams.map((vt) => vt.teamId)
+
+  const [upcomingGames, reviewStats, watchEvents] = await Promise.all([
+    db.game.findMany({
+      where: {
+        OR: [{ homeTeamId: { in: teamIds } }, { awayTeamId: { in: teamIds } }],
+        startTime: { gte: new Date() },
+        isCompleted: false,
+      },
+      include: { homeTeam: true, awayTeam: true, league: true },
+      orderBy: { startTime: "asc" },
+      take: 5,
+    }),
+    db.review.aggregate({
+      where: { venueId: venue.id },
+      _avg: { overallRating: true },
+      _count: { overallRating: true },
+    }),
+    db.watchEvent.findMany({
+      where: {
+        venueId: venue.id,
+        game: { startTime: { gte: new Date() } },
+      },
+      include: {
+        game: { include: { homeTeam: true, awayTeam: true } },
+        createdBy: { select: { name: true } },
+      },
+      take: 5,
+    }),
+  ])
+
+  return (
+    <div className="mx-auto max-w-4xl px-4 py-8">
+      {/* Header */}
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-neutral-900 dark:text-white">{venue.name}</h1>
+        <p className="mt-1 text-neutral-600 dark:text-neutral-400">
+          {venue.address}, {venue.city}, {venue.state}
+          {venue.zip ? ` ${venue.zip}` : ""}
+        </p>
+        <div className="mt-2 flex flex-wrap gap-4 text-sm text-neutral-500">
+          {venue.phone && <span>{venue.phone}</span>}
+          {venue.website && (
+            <a
+              href={venue.website}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-600 hover:underline"
+            >
+              Website
+            </a>
+          )}
+        </div>
+        {venue.description && (
+          <p className="mt-3 text-neutral-700 dark:text-neutral-300">{venue.description}</p>
+        )}
+      </div>
+
+      {/* Supported Teams */}
+      <section className="mb-8">
+        <h2 className="mb-3 text-lg font-semibold text-neutral-900 dark:text-white">
+          Supported Teams
+        </h2>
+        {venue.venueTeams.length === 0 ? (
+          <p className="text-sm text-neutral-400">No teams listed yet</p>
+        ) : (
+          <div className="flex flex-wrap gap-2">
+            {venue.venueTeams.map((vt) => (
+              <div
+                key={vt.id}
+                className="flex items-center gap-2 rounded-full border border-neutral-200 bg-neutral-50 px-3 py-1.5 dark:border-neutral-700 dark:bg-neutral-800"
+              >
+                {vt.team.logoUrl && (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={vt.team.logoUrl} alt={vt.team.name} className="h-5 w-5 object-contain" />
+                )}
+                <span className="text-sm font-medium text-neutral-800 dark:text-neutral-200">
+                  {vt.team.city} {vt.team.name}
+                </span>
+                <span className="text-xs text-neutral-400">{vt.team.league.shortName}</span>
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
+
+      {/* Rating Summary */}
+      <section className="mb-8">
+        <h2 className="mb-3 text-lg font-semibold text-neutral-900 dark:text-white">Rating</h2>
+        {reviewStats._count.overallRating === 0 ? (
+          <p className="text-sm text-neutral-400">No reviews yet</p>
+        ) : (
+          <div className="flex items-center gap-3">
+            <span className="text-4xl font-bold text-neutral-900 dark:text-white">
+              {reviewStats._avg.overallRating?.toFixed(1)}
+            </span>
+            <div>
+              <div className="text-yellow-500">★★★★★</div>
+              <div className="text-sm text-neutral-500">
+                {reviewStats._count.overallRating} review
+                {reviewStats._count.overallRating !== 1 ? "s" : ""}
+              </div>
+            </div>
+          </div>
+        )}
+      </section>
+
+      {/* Upcoming Games */}
+      <section className="mb-8">
+        <h2 className="mb-3 text-lg font-semibold text-neutral-900 dark:text-white">
+          Upcoming Games
+        </h2>
+        {upcomingGames.length === 0 ? (
+          <p className="text-sm text-neutral-400">No upcoming games found</p>
+        ) : (
+          <ul className="space-y-2">
+            {upcomingGames.map((game) => (
+              <li
+                key={game.id}
+                className="rounded-lg border border-neutral-200 p-3 dark:border-neutral-700"
+              >
+                <div className="text-sm font-medium text-neutral-900 dark:text-white">
+                  {game.awayTeam.city} {game.awayTeam.name} @ {game.homeTeam.city}{" "}
+                  {game.homeTeam.name}
+                </div>
+                <div className="mt-0.5 text-xs text-neutral-500">
+                  {new Date(game.startTime).toLocaleDateString("en-US", {
+                    weekday: "short",
+                    month: "short",
+                    day: "numeric",
+                    hour: "numeric",
+                    minute: "2-digit",
+                  })}
+                  {" · "}
+                  {game.league.shortName}
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+
+      {/* Watch Events */}
+      <section className="mb-8">
+        <h2 className="mb-3 text-lg font-semibold text-neutral-900 dark:text-white">
+          Watch Events
+        </h2>
+        {watchEvents.length === 0 ? (
+          <p className="text-sm text-neutral-400">No watch events yet</p>
+        ) : (
+          <ul className="space-y-2">
+            {watchEvents.map((we) => (
+              <li
+                key={we.id}
+                className="rounded-lg border border-neutral-200 p-3 dark:border-neutral-700"
+              >
+                <div className="text-sm font-medium text-neutral-900 dark:text-white">
+                  {we.title ?? `${we.game.awayTeam.name} @ ${we.game.homeTeam.name}`}
+                </div>
+                <div className="mt-0.5 text-xs text-neutral-500">
+                  Hosted by {we.createdBy.name ?? "Anonymous"}
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+
+      {/* Photos */}
+      <section className="mb-8">
+        <h2 className="mb-3 text-lg font-semibold text-neutral-900 dark:text-white">Photos</h2>
+        {venue.photos.length === 0 ? (
+          <p className="text-sm text-neutral-400">No photos yet</p>
+        ) : (
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+            {venue.photos.map((photo) => (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                key={photo.id}
+                src={photo.url}
+                alt={photo.caption ?? venue.name}
+                className="aspect-square w-full rounded-lg object-cover"
+              />
+            ))}
+          </div>
+        )}
+      </section>
+
+      {/* Recent Reviews */}
+      <section className="mb-8">
+        <h2 className="mb-3 text-lg font-semibold text-neutral-900 dark:text-white">
+          Recent Reviews
+        </h2>
+        {venue.reviews.length === 0 ? (
+          <p className="text-sm text-neutral-400">No reviews yet. Be the first to leave one!</p>
+        ) : (
+          <ul className="space-y-3">
+            {venue.reviews.map((review) => (
+              <li
+                key={review.id}
+                className="rounded-lg border border-neutral-200 p-4 dark:border-neutral-700"
+              >
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-medium text-neutral-900 dark:text-white">
+                    {review.user.name ?? "Anonymous"}
+                  </span>
+                  <span className="text-sm text-yellow-500">{"★".repeat(review.overallRating)}</span>
+                </div>
+                {review.comment && (
+                  <p className="mt-1.5 text-sm text-neutral-600 dark:text-neutral-400">
+                    {review.comment}
+                  </p>
+                )}
+                <p className="mt-1 text-xs text-neutral-400">
+                  {new Date(review.createdAt).toLocaleDateString()}
+                </p>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+
+      <div className="border-t border-neutral-200 pt-4 dark:border-neutral-800">
+        <Link href="/search" className="text-sm text-blue-600 hover:underline">
+          ← Back to search
+        </Link>
+      </div>
+    </div>
+  )
+}

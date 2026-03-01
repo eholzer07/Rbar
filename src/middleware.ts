@@ -2,7 +2,7 @@ import { auth } from "@/auth"
 import { NextResponse } from "next/server"
 
 export default auth((req) => {
-  const isProtected = ["/profile", "/onboarding", "/teams"].some((p) =>
+  const isProtected = ["/profile", "/onboarding", "/teams", "/search"].some((p) =>
     req.nextUrl.pathname.startsWith(p)
   )
   if (isProtected && !req.auth) {
