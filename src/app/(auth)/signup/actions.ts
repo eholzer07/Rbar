@@ -41,5 +41,5 @@ export async function signUpAction(formData: FormData) {
     },
   })
 
-  await signIn("credentials", { email, password, redirectTo: "/" })
+  await signIn("credentials", { email, password, redirectTo: "/onboarding" })
 }

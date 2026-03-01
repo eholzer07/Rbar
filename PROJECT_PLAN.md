@@ -130,13 +130,21 @@ Set up transactional email for auth flows.
 
 ---
 
-### Chunk 6 — Favorite Teams & Personalized Dashboard
+### Chunk 6 — Favorite Teams & Personalized Dashboard ✅ COMPLETE (2026-03-01)
 Give users a home screen that shows them what matters to them.
 
 - UI for browsing and selecting favorite teams (searchable, filterable by sport/league)
 - Upcoming games feed for favorite teams (sourced from Chunk 3 data)
 - Nearby venues showing each upcoming game (sourced from Chunk 2 + 7 data)
 - "Watch tonight" quick-access surface for game day
+
+**Delivered:**
+- `/onboarding` — post-signup team picker (skips if favorites already set)
+- `/teams` — permanent team browser with sport tabs + search
+- `toggleFavoriteAction` — server action with optimistic UI
+- `/api/venues/nearby` — PostGIS radius search (25mi default)
+- Dashboard `/` — favorites bar, Watch Tonight, Upcoming Games, Nearby Venues widget
+- Middleware updated to protect `/onboarding` and `/teams`
 
 ---
 
