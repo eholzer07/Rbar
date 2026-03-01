@@ -299,16 +299,19 @@ Internal tooling for operating the platform.
 
 ---
 
-### Chunk 14 — In-App Product Feedback
+### Chunk 14 — In-App Product Feedback ✅ COMPLETE (2026-03-01)
 Let users report bugs and request features from within the app.
 
-- Feedback form accessible from all authenticated pages (floating button or nav link)
-- Submission types: Bug Report, Feature Request, General Feedback
-- Fields: type, title, description, optional screenshot upload
-- Submissions stored in DB (`Feedback` table: userId, type, title, body, screenshotUrl, status, createdAt)
-- Admin queue in the Admin Panel to view, triage, and close submissions
-- Submitter receives confirmation email; optionally notified when status changes (Resolved / Won't Fix)
-- Basic dedup: rate-limit to 5 submissions per user per 24 hours
+**Delivered:**
+- `Feedback` model: FeedbackType (BUG_REPORT, FEATURE_REQUEST, GENERAL), FeedbackStatus (OPEN, IN_PROGRESS, RESOLVED, WONT_FIX)
+- `/feedback` — authenticated form (type, title, body), rate-limited to 5 per user per 24 hours
+- Floating `?` button in root layout — visible only to logged-in users
+- `/admin/feedback` — queue with status filter tabs, inline status update, delete
+- Admin overview: "Open Feedback" alert card
+
+**Deferred:**
+- Screenshot upload (needs file storage)
+- Email confirmation / status-change notifications (Chunk 5a)
 
 ---
 
@@ -386,7 +389,7 @@ At project completion, the following must be true:
 
 *Plan created: 2026-02-27*
 *Last updated: 2026-03-01*
-*Status: Chunk 13 complete — next up: Chunk 14 (In-App Product Feedback)*
+*Status: Chunk 14 complete — next up: Chunk 15 (Frontend Polish, Onboarding & Marketing)*
 
 ---
 
