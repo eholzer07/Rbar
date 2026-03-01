@@ -251,9 +251,19 @@ export default async function VenuePage({ params }: Props) {
 
       {/* Recent Reviews */}
       <section className="mb-8">
-        <h2 className="mb-3 text-lg font-semibold text-neutral-900 dark:text-white">
-          Recent Reviews
-        </h2>
+        <div className="mb-3 flex items-center justify-between">
+          <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">
+            Recent Reviews
+          </h2>
+          {session && (
+            <Link
+              href={`/review?venueId=${venue.id}`}
+              className="text-sm text-blue-600 hover:underline dark:text-blue-400"
+            >
+              Write a Review
+            </Link>
+          )}
+        </div>
         {venue.reviews.length === 0 ? (
           <p className="text-sm text-neutral-400">No reviews yet. Be the first to leave one!</p>
         ) : (
@@ -267,10 +277,51 @@ export default async function VenuePage({ params }: Props) {
                   <span className="text-sm font-medium text-neutral-900 dark:text-white">
                     {review.user.name ?? "Anonymous"}
                   </span>
-                  <span className="text-sm text-yellow-500">{"★".repeat(review.overallRating)}</span>
+                  <span className="text-sm text-yellow-500">
+                    {"★".repeat(review.overallRating)}
+                    {"☆".repeat(5 - review.overallRating)}
+                  </span>
                 </div>
+                {/* Game/venue experience badges */}
+                {(review.showedGame !== null || review.soundOn !== null || review.tvCount !== null) && (
+                  <div className="mt-2 flex flex-wrap gap-1.5">
+                    {review.showedGame === true && (
+                      <span className="rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700 dark:bg-green-900 dark:text-green-300">
+                        Showed the game
+                      </span>
+                    )}
+                    {review.showedGame === false && (
+                      <span className="rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-700 dark:bg-red-900 dark:text-red-300">
+                        Didn&apos;t show game
+                      </span>
+                    )}
+                    {review.soundOn === true && (
+                      <span className="rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-700 dark:bg-blue-900 dark:text-blue-300">
+                        Sound on
+                      </span>
+                    )}
+                    {review.soundOn === false && (
+                      <span className="rounded-full bg-neutral-100 px-2 py-0.5 text-xs font-medium text-neutral-600 dark:bg-neutral-700 dark:text-neutral-400">
+                        Muted
+                      </span>
+                    )}
+                    {review.tvCount !== null && (
+                      <span className="rounded-full bg-neutral-100 px-2 py-0.5 text-xs font-medium text-neutral-600 dark:bg-neutral-700 dark:text-neutral-400">
+                        {review.tvCount} TV{review.tvCount !== 1 ? "s" : ""}
+                      </span>
+                    )}
+                  </div>
+                )}
+                {/* Sub-ratings */}
+                {(review.foodRating || review.drinkRating || review.valueRating) && (
+                  <div className="mt-2 flex flex-wrap gap-3 text-xs text-neutral-500">
+                    {review.foodRating && <span>Food: {review.foodRating}/5</span>}
+                    {review.drinkRating && <span>Drinks: {review.drinkRating}/5</span>}
+                    {review.valueRating && <span>Value: {review.valueRating}/5</span>}
+                  </div>
+                )}
                 {review.comment && (
-                  <p className="mt-1.5 text-sm text-neutral-600 dark:text-neutral-400">
+                  <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400">
                     {review.comment}
                   </p>
                 )}

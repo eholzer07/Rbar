@@ -37,6 +37,18 @@ export default async function WatchEventPage({ params }: Props) {
   const windowStart = new Date(event.game.startTime.getTime() - 30 * 60 * 1000)
   const windowEnd = new Date(event.game.startTime.getTime() + 4 * 60 * 60 * 1000)
   const inGameWindow = now >= windowStart && now <= windowEnd
+  const gameOver = now > windowEnd
+
+  const existingReview =
+    session?.user?.id && myAttendance?.checkedInAt && gameOver
+      ? await db.review.findFirst({
+          where: {
+            venueId: event.venue.id,
+            userId: session.user.id,
+            gameId: event.gameId,
+          },
+        })
+      : null
 
   const boundRsvpGoing = rsvpAction.bind(null, event.id, "GOING")
   const boundRsvpInterested = rsvpAction.bind(null, event.id, "INTERESTED")
@@ -214,6 +226,33 @@ export default async function WatchEventPage({ params }: Props) {
           </div>
         )}
       </div>
+
+      {/* Post-game review prompt */}
+      {myAttendance?.checkedInAt && gameOver && (
+        <div className="mb-6 rounded-lg border border-neutral-200 bg-neutral-50 p-4 dark:border-neutral-700 dark:bg-neutral-800/50">
+          <p className="text-sm font-medium text-neutral-900 dark:text-white">
+            How was your experience at {event.venue.name}?
+          </p>
+          {existingReview ? (
+            <p className="mt-1 text-sm text-neutral-500">
+              You already left a review.{" "}
+              <Link
+                href={`/review?venueId=${event.venue.id}&gameId=${event.gameId}`}
+                className="text-blue-600 hover:underline dark:text-blue-400"
+              >
+                Update it →
+              </Link>
+            </p>
+          ) : (
+            <Link
+              href={`/review?venueId=${event.venue.id}&gameId=${event.gameId}`}
+              className="mt-2 inline-block rounded-md bg-neutral-900 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-700 dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200"
+            >
+              Leave a Review →
+            </Link>
+          )}
+        </div>
+      )}
 
       <div className="border-t border-neutral-200 pt-4 dark:border-neutral-800">
         <Link

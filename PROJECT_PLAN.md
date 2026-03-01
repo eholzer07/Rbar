@@ -224,22 +224,18 @@ The social coordination layer — plan to watch together and mark yourself at a 
 
 ---
 
-### Chunk 10 — Feedback & Reviews
+### Chunk 10 — Feedback & Reviews ✅ COMPLETE (2026-03-01)
 Close the loop after a watch experience to build venue quality data.
 
-- After a game ends, users who checked in receive a feedback prompt
-- Review form captures:
-  - Did the venue show the game? (Yes/No/Partial)
-  - Number of TVs showing the game
-  - Sound on? (Yes/No)
-  - Food quality (1–5)
-  - Drink/alcohol options (1–5)
-  - Overall cost/value (1–5)
-  - Overall rating (1–5)
-  - Optional text comment
-- Reviews are aggregated on venue pages
-- Venues with low "showed the game" ratings are flagged for review
-- Abuse prevention: one review per user per game per venue
+**Delivered:**
+- `src/app/review/actions.ts` — `submitReviewAction`: validates inputs, findFirst + create/update pattern (handles nullable gameId in unique constraint), redirects to venue page
+- `src/app/review/page.tsx` — review form: overall rating (1–5 required), showedGame (Yes/No), tvCount, soundOn, food/drink/value ratings (1–5 optional), comment; pre-fills if updating existing review
+- `src/middleware.ts` — `/review` added to protected paths
+- `src/app/watch-events/[id]/page.tsx` — post-game review prompt after windowEnd if user was checked in; shows "Update" link if review already exists
+- `src/app/venues/[slug]/page.tsx` — enhanced review cards (showedGame badge, sound badge, TV count, sub-ratings); "Write a Review" link for logged-in users
+
+**Deferred to Chunk 13 (Admin):**
+- Flagging venues with low "showed the game" ratings for admin review
 
 ---
 
@@ -368,7 +364,7 @@ At project completion, the following must be true:
 
 *Plan created: 2026-02-27*
 *Last updated: 2026-03-01*
-*Status: Chunk 9 complete — next up: Chunk 10 (Feedback & Reviews)*
+*Status: Chunk 10 complete — next up: Chunk 11 (Social Features & Fan Connections)*
 
 ---
 
@@ -385,4 +381,5 @@ At project completion, the following must be true:
 | 7 — Venue Search & Discovery | ✅ Complete | 2026-03-01 | Leaflet/OSM, geocode, /api/venues/search, split-screen UI, /venues/[slug] |
 | 8 — Venue Recommendations & Owner Claims | ✅ Complete | 2026-03-01 | /recommend-venue, /claim-venue/[id], claim badge on venue detail |
 | 9 — Watch Events & Check-Ins | ✅ Complete | 2026-03-01 | /watch-events/new, /watch-events/[id], RSVP, check-in window, dashboard section |
-| 10–16 | Pending | — | — |
+| 10 — Feedback & Reviews | ✅ Complete | 2026-03-01 | /review form, post-game prompt on watch event page, enhanced review cards on venue page |
+| 11–16 | Pending | — | — |
