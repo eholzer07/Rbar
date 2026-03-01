@@ -1,0 +1,200 @@
+[
+  {
+    "name": "Mustang Harry's",
+    "address": "352 7th Ave",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10001",
+    "phone": "+12122688930",
+    "website": "https://mustangharrys.com",
+    "description": "Massive multi-level Irish sports bar near Madison Square Garden with 85+ screens and award-winning wings, one of the busiest game-day venues in Midtown.",
+    "teams": ["NFL:NYG", "NFL:NYJ", "NBA:NYK", "NHL:NYR"]
+  },
+  {
+    "name": "Stout NYC",
+    "address": "133 W 33rd St",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10001",
+    "phone": "+12126296191",
+    "website": "https://stoutnyc.com",
+    "description": "Three-story, 16,000 sq ft Irish sports pub that is the Official Bar of the New York Rangers, located a block from MSG with 36 HD TVs.",
+    "teams": ["NHL:NYR", "NBA:NYK", "NFL:NYG", "NFL:NYJ"]
+  },
+  {
+    "name": "Football Factory at Legends",
+    "address": "6 W 33rd St",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10001",
+    "phone": "+12129677792",
+    "website": "https://www.legendsffnyc.com",
+    "description": "Multi-floor bar directly across from the Empire State Building, home to NYC's premier soccer bar showing 100+ matches per week including every MLS game.",
+    "teams": ["MLS:NYRB", "MLS:NYC", "NFL:NYG", "NFL:NYJ"]
+  },
+  {
+    "name": "Smithfield Hall NYC",
+    "address": "138 W 25th St",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10001",
+    "phone": "+12129299677",
+    "website": "https://smithfieldnyc.com",
+    "description": "Upscale Chelsea sports pub with 26 TVs and 9 heated outdoor tables, self-described as the home of football in New York City with a soccer-first focus.",
+    "teams": ["MLS:NYRB", "MLS:NYC"]
+  },
+  {
+    "name": "The Grafton",
+    "address": "126 1st Ave",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10009",
+    "phone": "+12122288580",
+    "website": "https://thegraftonnyc.com",
+    "description": "Family-run East Village Irish pub that becomes the neighborhood's hottest sports destination during Knicks and Yankees playoff runs, with a beloved backyard viewing area.",
+    "teams": ["NBA:NYK", "MLB:NYY", "MLB:NYM"]
+  },
+  {
+    "name": "Standings",
+    "address": "43 E 7th St",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10003",
+    "phone": "+12124200671",
+    "website": "https://standingsbar.com",
+    "description": "Beloved East Village sports den rated by Sports Illustrated as Class of the East Coast, with 8 flatscreens, all major sports packages, and free pizza on Fridays.",
+    "teams": ["NFL:NYG", "NFL:NYJ", "NBA:NYK", "MLB:NYY", "MLB:NYM", "NHL:NYR"]
+  },
+  {
+    "name": "Blondie's Sports",
+    "address": "212 W 79th St",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10024",
+    "phone": "+12123623311",
+    "website": "https://blondiessports.com",
+    "description": "Veteran Upper West Side sports bar open since 1990, home to numerous college alumni clubs and a top destination for football and basketball on the Upper West Side.",
+    "teams": ["NFL:NYJ", "NBA:NYK", "MLB:NYY"]
+  },
+  {
+    "name": "East End Bar & Grill",
+    "address": "1664 1st Ave",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10028",
+    "phone": "+12123483783",
+    "website": "https://eastendnewyork.com",
+    "description": "Self-proclaimed #1 sports bar on the Upper East Side with 16 HDTVs and an 80-inch projection screen; official Giants bar where wins earn free Fireball shots.",
+    "teams": ["NFL:NYG", "MLB:NYY", "NHL:NYR"]
+  },
+  {
+    "name": "Harlem Tavern",
+    "address": "2153 Frederick Douglass Blvd",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10026",
+    "phone": "+12128664500",
+    "website": "https://harlemtavern.com",
+    "description": "Spacious beer garden bar-restaurant at 116th St with 16 TVs and outdoor seating, a top pick for Yankees and Knicks watch parties in upper Manhattan.",
+    "teams": ["MLB:NYY", "NBA:NYK", "NFL:NYG"]
+  },
+  {
+    "name": "Stan's Sports Bar",
+    "address": "836 River Ave",
+    "city": "Bronx",
+    "state": "NY",
+    "zip": "10451",
+    "phone": "+17189935548",
+    "website": "https://stanssportsbar.com",
+    "description": "Legendary dive bar directly across from Yankee Stadium operating since the 1970s, open on Yankees home game days with wall-to-wall memorabilia and die-hard Bronx fans.",
+    "teams": ["MLB:NYY"]
+  },
+  {
+    "name": "Yankee Tavern",
+    "address": "72 E 161st St",
+    "city": "Bronx",
+    "state": "NY",
+    "zip": "10451",
+    "phone": "+17182926130",
+    "website": "https://yankeetavern.nyc",
+    "description": "Classic Bronx tavern established in 1964, filled floor-to-ceiling with Yankees memorabilia and fueling fans with beer and pub grub for six decades near Yankee Stadium.",
+    "teams": ["MLB:NYY"]
+  },
+  {
+    "name": "Billy's Sports Bar",
+    "address": "856 River Ave",
+    "city": "Bronx",
+    "state": "NY",
+    "zip": "10451",
+    "phone": "+17185859400",
+    "website": "https://billysbar.net",
+    "description": "Modern spacious sports bar near Yankee Stadium with a sleek interior, rooftop bar, and official NYCFC watch party atmosphere.",
+    "teams": ["MLB:NYY", "MLS:NYC"]
+  },
+  {
+    "name": "Roebling Sporting Club",
+    "address": "225 N 8th St",
+    "city": "Brooklyn",
+    "state": "NY",
+    "zip": "11211",
+    "phone": "+17183883088",
+    "website": "https://roeblingsportingclubnyc.com",
+    "description": "Williamsburg's go-to sports bar with 11 HD screens, all major sports packages, renowned for genuinely spicy wings and an extensive craft beer selection.",
+    "teams": ["NFL:NYG", "NFL:NYJ", "NBA:NYK", "NBA:BKN", "MLB:NYY", "NHL:NYR", "MLS:NYRB"]
+  },
+  {
+    "name": "Banter",
+    "address": "132 Havemeyer St",
+    "city": "Brooklyn",
+    "state": "NY",
+    "zip": "11211",
+    "phone": "+17185995200",
+    "website": "https://banterbrooklyn.com",
+    "description": "One of Brooklyn's most respected soccer pubs with deep ties to the local supporters community, showing Premier League, Champions League, and MLS on 6 screens.",
+    "teams": ["MLS:NYRB", "MLS:NYC"]
+  },
+  {
+    "name": "Keg & Lantern Brewing Company",
+    "address": "97 Nassau Ave",
+    "city": "Brooklyn",
+    "state": "NY",
+    "zip": "11222",
+    "phone": "+17183895050",
+    "website": "https://kegandlanternbrooklyn.com",
+    "description": "Craft brewery and sports bar hybrid in Greenpoint with in-house brewed ales, an outdoor backyard with TVs, and a warm pub setting.",
+    "teams": ["NFL:NYG", "NBA:NYK", "MLB:NYY"]
+  },
+  {
+    "name": "Break Bar & Billiards",
+    "address": "Broadway",
+    "city": "Astoria",
+    "state": "NY",
+    "zip": "11106",
+    "phone": "+17187775400",
+    "website": "https://break-ny.com",
+    "description": "7,000 sq ft Queens entertainment bar with 25+ HD TVs, pool tables, ping-pong, foosball, and darts; the top sports bar destination in Astoria.",
+    "teams": ["NFL:NYG", "NFL:NYJ", "NBA:NYK", "MLB:NYY", "MLB:NYM"]
+  },
+  {
+    "name": "Bronx Alehouse",
+    "address": "216 W 238th St",
+    "city": "Bronx",
+    "state": "NY",
+    "zip": "10463",
+    "phone": "+17186010204",
+    "website": "https://bronxalehouse.com",
+    "description": "Lively Kingsbridge craft beer bar with 40+ rotating taps and numerous TVs, drawing passionate local crowds for Giants, Yankees, and Knicks games.",
+    "teams": ["NFL:NYG", "MLB:NYY", "NBA:NYK"]
+  },
+  {
+    "name": "Overlook",
+    "address": "225 E 44th St",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10017",
+    "phone": "+12126827266",
+    "website": "https://overlooknyc.com",
+    "description": "Midtown East sports bar with 26 HDTVs and an open-air rooftop deck, recognized as the best Islanders bar in Manhattan.",
+    "teams": ["NHL:NYI"]
+  }
+]

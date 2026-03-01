@@ -1,0 +1,199 @@
+[
+  {
+    "name": "Sluggers World Class Sports Bar",
+    "address": "3540 N Clark St",
+    "city": "Chicago",
+    "state": "IL",
+    "zip": "60657",
+    "phone": "+17732480055",
+    "website": "https://www.sluggersbar.com",
+    "description": "Wrigleyville's premier sports bar since 1985, featuring 30+ HD screens, batting cages, and an arcade on the second floor, steps from Wrigley Field.",
+    "teams": ["MLB:CHC", "NFL:CHI", "NBA:CHI", "NHL:CHI"]
+  },
+  {
+    "name": "Murphy's Bleachers",
+    "address": "3655 N Sheffield Ave",
+    "city": "Chicago",
+    "state": "IL",
+    "zip": "60613",
+    "phone": "+17732815356",
+    "website": "https://murphysbleachers.com",
+    "description": "Historic Cubs bar directly across from the Wrigley Field bleacher entrance, open since 1980, with a rooftop patio and classic pub fare.",
+    "teams": ["MLB:CHC", "NFL:CHI"]
+  },
+  {
+    "name": "Timothy O'Toole's Pub",
+    "address": "622 N Fairbanks Ct",
+    "city": "Chicago",
+    "state": "IL",
+    "zip": "60611",
+    "phone": "+13126420700",
+    "website": "https://www.timothyotooles.com",
+    "description": "Chicago's favorite sports bar since 1992 near Michigan Avenue, featuring 72 HD TVs and a full sports package showing 40+ games daily.",
+    "teams": ["NFL:CHI", "NBA:CHI", "MLB:CHC", "MLB:CWS", "NHL:CHI"]
+  },
+  {
+    "name": "Joe's Bar on Weed St",
+    "address": "940 W Weed St",
+    "city": "Chicago",
+    "state": "IL",
+    "zip": "60642",
+    "phone": "+13122735118",
+    "website": "https://www.joesbar.com",
+    "description": "Chicago's largest sports bar at 20,000 sq ft with 100+ TVs in a warehouse-style venue near Lincoln Park.",
+    "teams": ["NFL:CHI", "NBA:CHI", "MLB:CHC", "NHL:CHI"]
+  },
+  {
+    "name": "The Barn Hockey Bar",
+    "address": "1659 W Ogden Ave",
+    "city": "Chicago",
+    "state": "IL",
+    "zip": "60612",
+    "phone": "+13126463712",
+    "website": "https://barnhockeybar.com",
+    "description": "Hockey-dedicated bar near the United Center named after the old Chicago Stadium nickname, with 50 TVs and Blackhawks memorabilia.",
+    "teams": ["NHL:CHI"]
+  },
+  {
+    "name": "Ranalli's West Loop",
+    "address": "1326 W Madison St",
+    "city": "Chicago",
+    "state": "IL",
+    "zip": "60607",
+    "phone": "+13129817100",
+    "website": "https://www.ranalliswestloop.com",
+    "description": "Pizza bar and official Blackhawks bar near the United Center with a dog-friendly patio and free shuttles to United Center events.",
+    "teams": ["NHL:CHI", "NBA:CHI", "NFL:CHI"]
+  },
+  {
+    "name": "Hawkeye's Bar and Grill",
+    "address": "1458 W Taylor St",
+    "city": "Chicago",
+    "state": "IL",
+    "zip": "60607",
+    "phone": "+13122263951",
+    "website": "https://hawkeyeschicago.com",
+    "description": "Neighborhood sports bar in University Village open since 1987, official Blackhawks bar and go-to for Bears and White Sox fans on the Near West Side.",
+    "teams": ["NHL:CHI", "NFL:CHI", "MLB:CWS"]
+  },
+  {
+    "name": "Reggie's Chicago",
+    "address": "2105 S State St",
+    "city": "Chicago",
+    "state": "IL",
+    "zip": "60616",
+    "phone": "+13129490120",
+    "website": "https://www.reggieslive.com",
+    "description": "South Loop bar and grill with 21 TVs, 70+ craft beers, award-winning wings, and a rooftop deck; offers free buses to White Sox, Bears, and Blackhawks games.",
+    "teams": ["MLB:CWS", "NFL:CHI", "NHL:CHI"]
+  },
+  {
+    "name": "Mother Hubbard's Sports Pub",
+    "address": "5 W Hubbard St",
+    "city": "Chicago",
+    "state": "IL",
+    "zip": "60654",
+    "phone": "+13128280007",
+    "website": "https://www.motherhubbardschicago.com",
+    "description": "River North sports pub with 45+ TVs and multiple satellite feeds; official Blackhawks bar and a Bears and Bulls watching staple.",
+    "teams": ["NHL:CHI", "NFL:CHI", "NBA:CHI"]
+  },
+  {
+    "name": "First Draft",
+    "address": "649 S Clark St",
+    "city": "Chicago",
+    "state": "IL",
+    "zip": "60605",
+    "phone": "+13124611062",
+    "website": "https://www.firstdraftchicago.com",
+    "description": "South Loop craft beer bar with 23 large-screen TVs and a full DirecTV sports package; official Blackhawks bar.",
+    "teams": ["NHL:CHI", "NFL:CHI", "NBA:CHI", "MLB:CWS"]
+  },
+  {
+    "name": "Benchmark",
+    "address": "1510 N Wells St",
+    "city": "Chicago",
+    "state": "IL",
+    "zip": "60610",
+    "phone": "+13126499640",
+    "website": "https://www.benchmarkchicago.com",
+    "description": "Old Town two-floor sports bar with 40+ screens, tavern pizza, and Chicago's first fully retractable rooftop bar.",
+    "teams": ["NFL:CHI", "NBA:CHI", "NHL:CHI", "MLB:CHC"]
+  },
+  {
+    "name": "Broken Barrel Bar",
+    "address": "2548 N Southport Ave",
+    "city": "Chicago",
+    "state": "IL",
+    "zip": "60614",
+    "phone": "+17733274900",
+    "website": "https://www.brokenbarrelbar.com",
+    "description": "Lincoln Park chef-driven sports bar and beer garden with house-smoked meats, rotating craft taps, and a heated year-round patio.",
+    "teams": ["NFL:CHI", "MLB:CHC", "NBA:CHI", "NHL:CHI"]
+  },
+  {
+    "name": "Jake Melnick's Corner Tap",
+    "address": "41 E Superior St",
+    "city": "Chicago",
+    "state": "IL",
+    "zip": "60611",
+    "phone": "+13122660400",
+    "website": "https://www.jakemelnicks.com",
+    "description": "Near Mag Mile sports bar famous since 2002 for nationally acclaimed chicken wings, BBQ, and full multi-sport TV coverage.",
+    "teams": ["NFL:CHI", "NBA:CHI", "NHL:CHI", "MLB:CHC"]
+  },
+  {
+    "name": "Cody's Public House",
+    "address": "1658 W Barry Ave",
+    "city": "Chicago",
+    "state": "IL",
+    "zip": "60657",
+    "phone": "+17737998217",
+    "website": "https://www.codyschicago.com",
+    "description": "Lakeview neighborhood dive bar open since 1986 with a large dog-friendly beer garden and official Blackhawks bar designation.",
+    "teams": ["NHL:CHI", "MLB:CHC", "NFL:CHI"]
+  },
+  {
+    "name": "The Pony Inn",
+    "address": "1638 W Belmont Ave",
+    "city": "Chicago",
+    "state": "IL",
+    "zip": "60657",
+    "phone": "+17738285055",
+    "website": "https://www.theponychicago.com",
+    "description": "Lakeview sports bar with a retractable rooftop, multiple screens, free popcorn, and official Bears, Blackhawks, and Bulls watch party events.",
+    "teams": ["NHL:CHI", "NFL:CHI", "NBA:CHI", "MLB:CHC"]
+  },
+  {
+    "name": "DraftKings Sportsbook at Wrigley Field",
+    "address": "1012 W Addison St",
+    "city": "Chicago",
+    "state": "IL",
+    "zip": "60613",
+    "phone": "+17737396596",
+    "website": "https://draftkingssportsbook.wrigleyfield.com",
+    "description": "Premier sports entertainment venue inside Wrigley Field with a 2,000 sq ft LED display, 300 seats, 25 simultaneous games, and in-person sports betting.",
+    "teams": ["MLB:CHC", "NFL:CHI", "NBA:CHI", "NHL:CHI"]
+  },
+  {
+    "name": "Kirkwood Bar & Grill",
+    "address": "2934 N Sheffield Ave",
+    "city": "Chicago",
+    "state": "IL",
+    "zip": "60657",
+    "phone": "+17737700700",
+    "website": "https://www.kirkwoodbar.com",
+    "description": "Lakeview multi-screen sports venue with 35+ TVs and stadium seating near Wrigley Field, drawing strong Cubs and Bears crowds.",
+    "teams": ["MLB:CHC", "NFL:CHI", "NBA:CHI", "NHL:CHI"]
+  },
+  {
+    "name": "Theory",
+    "address": "9 W Hubbard St",
+    "city": "Chicago",
+    "state": "IL",
+    "zip": "60654",
+    "website": "https://theorybar.com",
+    "description": "Upscale River North sports lounge with 35+ TVs and elevated cocktails; an official Chicago Blackhawks bar.",
+    "teams": ["NHL:CHI", "NFL:CHI", "NBA:CHI"]
+  }
+]
