@@ -12,6 +12,7 @@ export default async function AdminOverviewPage() {
     checkInsWeek,
     reviewsWeek,
     watchEventsTotal,
+    openFeedback,
   ] = await Promise.all([
     db.user.count(),
     db.venue.count({ where: { status: "ACTIVE" } }),
@@ -20,6 +21,7 @@ export default async function AdminOverviewPage() {
     db.watchEventAttendee.count({ where: { checkedInAt: { not: null }, updatedAt: { gte: sevenDaysAgo } } }),
     db.review.count({ where: { createdAt: { gte: sevenDaysAgo } } }),
     db.watchEvent.count(),
+    db.feedback.count({ where: { status: "OPEN" } }),
   ])
 
   const stats = [
@@ -30,6 +32,7 @@ export default async function AdminOverviewPage() {
     { label: "Check-ins (7d)", value: checkInsWeek, href: null },
     { label: "Reviews (7d)", value: reviewsWeek, href: "/admin/reviews" },
     { label: "Total Watch Events", value: watchEventsTotal, href: null },
+    { label: "Open Feedback", value: openFeedback, href: "/admin/feedback", alert: openFeedback > 0 },
   ]
 
   return (

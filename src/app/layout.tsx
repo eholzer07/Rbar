@@ -4,6 +4,7 @@ import Link from "next/link";
 import "./globals.css";
 import { Providers } from "@/components/providers";
 import NotificationBell from "@/components/notification-bell";
+import FeedbackButton from "@/components/feedback-button";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -41,6 +42,7 @@ export default function RootLayout({
           </nav>
         </header>
         <Providers>{children}</Providers>
+        <FeedbackButton />
       </body>
     </html>
   );

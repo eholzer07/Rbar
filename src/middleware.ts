@@ -14,7 +14,7 @@ export default auth((req) => {
   // Protected routes: require auth
   const isProtected = [
     "/profile", "/onboarding", "/teams", "/search",
-    "/recommend-venue", "/claim-venue", "/watch-events/new", "/review", "/feed", "/notifications",
+    "/recommend-venue", "/claim-venue", "/watch-events/new", "/review", "/feed", "/notifications", "/feedback",
   ].some((p) => pathname.startsWith(p))
   if (isProtected && !req.auth) {
     return NextResponse.redirect(new URL("/signin", req.url))
