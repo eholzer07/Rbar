@@ -1,11 +1,14 @@
 import { notFound } from "next/navigation"
 import Link from "next/link"
+import { auth } from "@/auth"
 import { db } from "@/lib/db"
 
 type Props = { params: Promise<{ slug: string }> }
 
 export default async function VenuePage({ params }: Props) {
   const { slug } = await params
+
+  const session = await auth()
 
   const venue = await db.venue.findUnique({
     where: { slug },
@@ -23,6 +26,12 @@ export default async function VenuePage({ params }: Props) {
   if (!venue) notFound()
 
   const teamIds = venue.venueTeams.map((vt) => vt.teamId)
+
+  const existingClaim = session?.user?.id
+    ? await db.venueOwnerClaim.findFirst({
+        where: { venueId: venue.id, userId: session.user.id, status: "PENDING" },
+      })
+    : null
 
   const [upcomingGames, reviewStats, watchEvents] = await Promise.all([
     db.game.findMany({
@@ -78,6 +87,24 @@ export default async function VenuePage({ params }: Props) {
         {venue.description && (
           <p className="mt-3 text-neutral-700 dark:text-neutral-300">{venue.description}</p>
         )}
+        <div className="mt-3">
+          {session && venue.ownerId === session.user.id ? (
+            <span className="inline-block rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-800 dark:bg-green-900 dark:text-green-200">
+              You own this venue
+            </span>
+          ) : session && existingClaim ? (
+            <span className="inline-block rounded-full bg-yellow-100 px-3 py-1 text-xs font-medium text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">
+              Claim pending review
+            </span>
+          ) : session && !venue.ownerId && !existingClaim ? (
+            <Link
+              href={`/claim-venue/${venue.id}`}
+              className="text-sm text-blue-600 hover:underline dark:text-blue-400"
+            >
+              Claim this venue
+            </Link>
+          ) : null}
+        </div>
       </div>
 
       {/* Supported Teams */}
@@ -178,15 +205,27 @@ export default async function VenuePage({ params }: Props) {
                 key={we.id}
                 className="rounded-lg border border-neutral-200 p-3 dark:border-neutral-700"
               >
-                <div className="text-sm font-medium text-neutral-900 dark:text-white">
-                  {we.title ?? `${we.game.awayTeam.name} @ ${we.game.homeTeam.name}`}
-                </div>
-                <div className="mt-0.5 text-xs text-neutral-500">
-                  Hosted by {we.createdBy.name ?? "Anonymous"}
-                </div>
+                <Link href={`/watch-events/${we.id}`} className="block hover:opacity-80">
+                  <div className="text-sm font-medium text-blue-600 hover:underline dark:text-blue-400">
+                    {we.title ?? `${we.game.awayTeam.name} @ ${we.game.homeTeam.name}`}
+                  </div>
+                  <div className="mt-0.5 text-xs text-neutral-500">
+                    Hosted by {we.createdBy.name ?? "Anonymous"}
+                  </div>
+                </Link>
               </li>
             ))}
           </ul>
+        )}
+        {session && (
+          <div className="mt-3">
+            <Link
+              href={`/watch-events/new?venueId=${venue.id}`}
+              className="text-sm text-blue-600 hover:underline dark:text-blue-400"
+            >
+              + Host a Watch Event
+            </Link>
+          </div>
         )}
       </section>
 

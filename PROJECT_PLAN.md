@@ -177,43 +177,50 @@ The core search experience — find a bar near me for my team's game.
 - `src/app/layout.tsx` — added global sticky nav header (Rbar, Search, My Teams, Profile)
 - Middleware updated to protect `/search`
 - `tsc --noEmit` and `npm run lint` both pass with 0 errors
+- Commit `0122992` pushed to `main` on GitHub (2026-03-01)
 
 ---
 
-### Chunk 8 — Venue Recommendations & Owner Verification
+### Chunk 8 — Venue Recommendations & Owner Claims ✅ COMPLETE (2026-03-01)
 Let users grow the database and let venue owners claim their listing.
 
-**User Recommendations:**
-- Form to submit a venue not in the database
-- Specify which team(s) they support
-- Submission goes into moderation queue
-- Admin approves/rejects from admin panel
+**Delivered:**
+- `/recommend-venue` — auth-guarded form to submit a new venue (name, address, city, state, optional phone/website/description/teams); creates `VenueRecommendation` + `VenueRecommendationTeam` rows with `status: PENDING`
+- `/claim-venue/[venueId]` — auth-guarded form to claim ownership of an existing venue with optional message; creates `VenueOwnerClaim` row with `status: PENDING`; guards against duplicate pending claims and self-claims
+- Venue detail page (`/venues/[slug]`) — conditionally shows "Claim this venue" link, "Claim pending review" badge, or "You own this venue" badge based on auth + claim state
+- Middleware updated to protect `/recommend-venue` and `/claim-venue`
 
-**Venue Owner Portal:**
-- Venue owner creates an account and claims a venue
-- Verification flow (email domain match, or manual admin approval)
-- Once verified, owner can:
-  - Update venue info (hours, photos, description)
-  - Confirm or update which teams/games they show
-  - Mark special game day events or deals
+**Deferred to Chunk 13:**
+- Admin review queue for recommendations and claims (approve/reject UI)
+
+**Deferred to a new chunk after Chunk 13:**
+- Owner Portal: editing venue info, managing teams/games, uploading photos, marking special events
+
+**Deferred to Chunk 5a:**
+- Email domain match verification for owner claims
 
 ---
 
-### Chunk 9 — Watch Events & Check-Ins
+### Chunk 9 — Watch Events & Check-Ins ✅ COMPLETE (2026-03-01)
 The social coordination layer — plan to watch together and mark yourself at a venue.
 
-**Watch Events:**
-- Any user can create a watch event at a venue for a specific game
-- Event has title, game, venue, date/time, description
-- Visibility: Public (all fans of this team in the area can see it) OR Private (invite only)
-- Invite specific users by username/email
-- RSVP (Going / Interested / Not Going)
-- Event page shows attendee list
+**Delivered:**
+- `src/app/watch-events/new/actions.ts` — `createWatchEventAction` (creates event + auto-RSVPs creator as GOING)
+- `src/app/watch-events/new/page.tsx` — create form with game picker, optional title/description, visibility toggle
+- `src/app/watch-events/[id]/actions.ts` — `rsvpAction` (upsert GOING/INTERESTED/NOT_GOING), `checkInAction` (30-min pre-game to 4-hr post-game window)
+- `src/app/watch-events/[id]/page.tsx` — event detail: game/venue/host info, RSVP buttons, check-in, attendee lists with checked-in badges
+- `src/middleware.ts` — `/watch-events/new` added to protected paths
+- `src/app/venues/[slug]/page.tsx` — watch event list items are now links; "Host a Watch Event" link for logged-in users
+- `src/app/page.tsx` — "My Watch Events" dashboard section (events created or RSVP'd GOING/INTERESTED)
 
-**Check-Ins:**
-- During a game window, users can check in at a venue
-- Check-in is visible to friends and to other fans browsing that venue
-- Triggers post-game review prompt when game ends
+**Deferred to Chunk 11:**
+- Private event invite system (PRIVATE events visible to creator only until then)
+
+**Deferred to Chunk 10:**
+- Post-game review prompt after check-in
+
+**Deferred to Chunk 12:**
+- Push notifications for event activity
 
 ---
 
@@ -361,7 +368,7 @@ At project completion, the following must be true:
 
 *Plan created: 2026-02-27*
 *Last updated: 2026-03-01*
-*Status: Chunk 4 complete — next up: Chunk 5 (Authentication & User Profiles)*
+*Status: Chunk 9 complete — next up: Chunk 10 (Feedback & Reviews)*
 
 ---
 
@@ -373,4 +380,9 @@ At project completion, the following must be true:
 | 2 — Database Schema Design | ✅ Complete | 2026-02-28 | Full schema, migrations, seed |
 | 3 — Sports Data Integration | ✅ Complete | 2026-02-28 | TheSportsDB free tier; 5 leagues, 49 teams with logos |
 | 4 — Venue Data Seeding | ✅ Complete | 2026-03-01 | 36 venues (Chicago + NYC), Nominatim geocoding, 119 VenueTeam links |
-| 5–16 | Pending | — | — |
+| 5 — Authentication & User Profiles | ✅ Complete | 2026-03-01 | next-auth@beta, JWT, Credentials, sign-in/up/profile, middleware |
+| 6 — Favorite Teams & Dashboard | ✅ Complete | 2026-03-01 | /onboarding, /teams, toggleFavoriteAction, nearby venues widget |
+| 7 — Venue Search & Discovery | ✅ Complete | 2026-03-01 | Leaflet/OSM, geocode, /api/venues/search, split-screen UI, /venues/[slug] |
+| 8 — Venue Recommendations & Owner Claims | ✅ Complete | 2026-03-01 | /recommend-venue, /claim-venue/[id], claim badge on venue detail |
+| 9 — Watch Events & Check-Ins | ✅ Complete | 2026-03-01 | /watch-events/new, /watch-events/[id], RSVP, check-in window, dashboard section |
+| 10–16 | Pending | — | — |

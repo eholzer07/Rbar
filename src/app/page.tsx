@@ -50,7 +50,7 @@ export default async function Home() {
   const todayStart = new Date(now.toDateString())
   const todayEnd = new Date(todayStart.getTime() + 86400000 - 1)
 
-  const [upcomingGames, tonightGames] = await Promise.all([
+  const [upcomingGames, tonightGames, myWatchEvents] = await Promise.all([
     db.game.findMany({
       where: {
         OR: [
@@ -75,6 +75,25 @@ export default async function Home() {
       },
       include: { homeTeam: true, awayTeam: true, league: true },
       orderBy: { startTime: "asc" },
+    }),
+    db.watchEvent.findMany({
+      where: {
+        OR: [
+          { createdById: session.user.id },
+          {
+            attendees: {
+              some: { userId: session.user.id, status: { in: ["GOING", "INTERESTED"] } },
+            },
+          },
+        ],
+        game: { startTime: { gte: now }, isCompleted: false },
+      },
+      include: {
+        game: { include: { homeTeam: true, awayTeam: true } },
+        venue: { select: { name: true, slug: true } },
+      },
+      orderBy: { game: { startTime: "asc" } },
+      take: 5,
     }),
   ])
 
@@ -165,6 +184,43 @@ export default async function Home() {
                 </div>
                 <p className="text-sm text-neutral-500">{formatGameTime(game.startTime)}</p>
               </div>
+            ))}
+          </div>
+        )}
+      </section>
+
+      {/* My Watch Events */}
+      <section>
+        <h2 className="mb-3 text-lg font-semibold text-neutral-900 dark:text-white">
+          My Watch Events
+        </h2>
+        {myWatchEvents.length === 0 ? (
+          <p className="text-sm text-neutral-500">
+            No upcoming watch events.{" "}
+            <Link href="/search" className="text-blue-600 hover:underline">
+              Browse venues
+            </Link>{" "}
+            to find one or host your own.
+          </p>
+        ) : (
+          <div className="space-y-2">
+            {myWatchEvents.map((we) => (
+              <Link
+                key={we.id}
+                href={`/watch-events/${we.id}`}
+                className="block rounded-lg border border-neutral-200 bg-white p-4 hover:border-neutral-300 dark:border-neutral-700 dark:bg-neutral-900 dark:hover:border-neutral-600"
+              >
+                <p className="font-medium text-neutral-900 dark:text-white">
+                  {we.title ??
+                    `${we.game.awayTeam.city} ${we.game.awayTeam.name} @ ${we.game.homeTeam.city} ${we.game.homeTeam.name}`}
+                </p>
+                <p className="mt-0.5 text-sm text-neutral-500">
+                  at{" "}
+                  <span className="text-blue-600 dark:text-blue-400">{we.venue.name}</span>
+                  {" · "}
+                  {formatGameTime(we.game.startTime)}
+                </p>
+              </Link>
             ))}
           </div>
         )}
