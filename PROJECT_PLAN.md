@@ -104,17 +104,29 @@ The chicken-and-egg problem: the app has no value without venue data.
 
 ---
 
-### Chunk 5 — Authentication & User Profiles
+### Chunk 5 — Authentication & User Profiles ✅ COMPLETE (2026-03-01)
 Allow users to create accounts and personalize their experience.
 
-- Email/password registration with email verification
-- Login, logout, session management (NextAuth.js)
-- Password reset flow
-- User profile page (name, avatar, home city, bio)
-- Account settings page
-- Route protection middleware (auth-gated pages)
+**Actual implementation:**
+- Email/password registration — `emailVerified` set on signup (no email sending)
+- Login, logout, session management via NextAuth.js v5 (JWT strategy)
+- Profile page: name, username, bio, homeCity — server actions, pre-filled form
+- Route protection middleware (auth-gated pages via Edge middleware)
+- Sign-in, sign-up pages with error handling and redirect-if-authed
+- No migration needed — schema already had all Auth.js v5 tables
 
-Designed to support adding Google/Apple OAuth later without schema changes.
+**Deferred to Chunk 5a:**
+- Email infrastructure (Resend), email verification, password reset
+
+---
+
+### Chunk 5a — Email Infrastructure (Deferred)
+Set up transactional email for auth flows.
+
+- Set up Resend (transactional email provider)
+- Email templates: verification, password reset, welcome
+- Email verification on signup — send link, require verification before login
+- Password reset flow — forgot password page, email link, reset page
 
 ---
 
