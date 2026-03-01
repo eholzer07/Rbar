@@ -239,14 +239,21 @@ Close the loop after a watch experience to build venue quality data.
 
 ---
 
-### Chunk 11 — Social Features & Fan Connections
+### Chunk 11 — Social Features & Fan Connections ✅ COMPLETE (2026-03-01)
 Let fans find each other and coordinate around shared teams.
 
-- Follow/friend system between users
-- User profile pages (public-facing: teams, recent check-ins, upcoming events)
-- Activity feed: see where friends are watching
-- "Who else is watching near me?" — show other fans who have checked in or RSVP'd nearby for the same game
-- Team fan community pages: aggregate of all users who follow a team in a region
+**Delivered:**
+- `src/app/users/[username]/actions.ts` — `followAction`, `unfollowAction` (upsert/deleteMany on Follow model, bound pattern)
+- `src/app/users/[username]/page.tsx` — public profile: name, bio, homeCity, follower/following counts, follow/unfollow button, favorite teams, upcoming watch events, recent check-ins (30 days)
+- `src/app/feed/page.tsx` — activity feed: upcoming PUBLIC watch events from followed users; shows who is hosting/going; empty state with CTA
+- `src/app/page.tsx` — "Friends' Activity" dashboard section (top 3 upcoming events from followed users, "See all →" link to /feed)
+- `src/app/layout.tsx` — "Feed" link added to global nav
+- `src/middleware.ts` — `/feed` added to protected paths
+
+**Deferred:**
+- Private event invite system (needs `INVITED` added to `RsvpStatus` enum → migration)
+- "Who else is watching near me?" (requires browser geolocation)
+- Team fan community pages (requires region/geolocation filtering)
 
 ---
 
@@ -364,7 +371,7 @@ At project completion, the following must be true:
 
 *Plan created: 2026-02-27*
 *Last updated: 2026-03-01*
-*Status: Chunk 10 complete — next up: Chunk 11 (Social Features & Fan Connections)*
+*Status: Chunk 11 complete — next up: Chunk 12 (Notifications & Alerts)*
 
 ---
 
@@ -382,4 +389,5 @@ At project completion, the following must be true:
 | 8 — Venue Recommendations & Owner Claims | ✅ Complete | 2026-03-01 | /recommend-venue, /claim-venue/[id], claim badge on venue detail |
 | 9 — Watch Events & Check-Ins | ✅ Complete | 2026-03-01 | /watch-events/new, /watch-events/[id], RSVP, check-in window, dashboard section |
 | 10 — Feedback & Reviews | ✅ Complete | 2026-03-01 | /review form, post-game prompt on watch event page, enhanced review cards on venue page |
-| 11–16 | Pending | — | — |
+| 11 — Social Features & Fan Connections | ✅ Complete | 2026-03-01 | Follow/unfollow, /users/[username] profile, /feed activity feed, dashboard Friends' Activity |
+| 12–16 | Pending | — | — |

@@ -34,6 +34,7 @@ export default function RootLayout({
           <nav className="flex gap-4 text-sm text-neutral-600 dark:text-neutral-400">
             <Link href="/search" className="hover:text-neutral-900 dark:hover:text-white">Search</Link>
             <Link href="/teams" className="hover:text-neutral-900 dark:hover:text-white">My Teams</Link>
+            <Link href="/feed" className="hover:text-neutral-900 dark:hover:text-white">Feed</Link>
             <Link href="/profile" className="hover:text-neutral-900 dark:hover:text-white">Profile</Link>
           </nav>
         </header>

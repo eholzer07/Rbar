@@ -50,7 +50,13 @@ export default async function Home() {
   const todayStart = new Date(now.toDateString())
   const todayEnd = new Date(todayStart.getTime() + 86400000 - 1)
 
-  const [upcomingGames, tonightGames, myWatchEvents] = await Promise.all([
+  const following = await db.follow.findMany({
+    where: { followerId: session.user.id },
+    select: { followingId: true },
+  })
+  const followingIds = following.map((f) => f.followingId)
+
+  const [upcomingGames, tonightGames, myWatchEvents, friendsEvents] = await Promise.all([
     db.game.findMany({
       where: {
         OR: [
@@ -95,6 +101,25 @@ export default async function Home() {
       orderBy: { game: { startTime: "asc" } },
       take: 5,
     }),
+    followingIds.length > 0
+      ? db.watchEvent.findMany({
+          where: {
+            visibility: "PUBLIC",
+            game: { startTime: { gte: now }, isCompleted: false },
+            OR: [
+              { createdById: { in: followingIds } },
+              { attendees: { some: { userId: { in: followingIds }, status: "GOING" } } },
+            ],
+          },
+          include: {
+            game: { include: { homeTeam: true, awayTeam: true } },
+            venue: { select: { name: true, slug: true } },
+            createdBy: { select: { name: true, username: true } },
+          },
+          orderBy: { game: { startTime: "asc" } },
+          take: 3,
+        })
+      : Promise.resolve([]),
   ])
 
   return (
@@ -225,6 +250,52 @@ export default async function Home() {
           </div>
         )}
       </section>
+
+      {/* Friends' Activity */}
+      {followingIds.length > 0 && (
+        <section>
+          <div className="mb-3 flex items-center justify-between">
+            <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">
+              Friends&apos; Activity
+            </h2>
+            <Link
+              href="/feed"
+              className="text-sm text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300"
+            >
+              See all →
+            </Link>
+          </div>
+          {friendsEvents.length === 0 ? (
+            <p className="text-sm text-neutral-500">
+              No upcoming events from people you follow.
+            </p>
+          ) : (
+            <div className="space-y-2">
+              {friendsEvents.map((we) => (
+                <Link
+                  key={we.id}
+                  href={`/watch-events/${we.id}`}
+                  className="block rounded-lg border border-neutral-200 bg-white p-4 hover:border-neutral-300 dark:border-neutral-700 dark:bg-neutral-900 dark:hover:border-neutral-600"
+                >
+                  <p className="text-xs text-neutral-400">
+                    {we.createdBy.name ?? we.createdBy.username ?? "Someone"} is hosting
+                  </p>
+                  <p className="font-medium text-neutral-900 dark:text-white">
+                    {we.title ??
+                      `${we.game.awayTeam.city} ${we.game.awayTeam.name} @ ${we.game.homeTeam.city} ${we.game.homeTeam.name}`}
+                  </p>
+                  <p className="mt-0.5 text-sm text-neutral-500">
+                    at{" "}
+                    <span className="text-blue-600 dark:text-blue-400">{we.venue.name}</span>
+                    {" · "}
+                    {formatGameTime(we.game.startTime)}
+                  </p>
+                </Link>
+              ))}
+            </div>
+          )}
+        </section>
+      )}
 
       {/* Nearby Venues */}
       <NearbyVenues teamIds={favoriteTeamIds} />
