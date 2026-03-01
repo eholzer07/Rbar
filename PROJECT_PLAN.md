@@ -277,16 +277,25 @@ Keep users informed without requiring them to open the app.
 
 ---
 
-### Chunk 13 — Admin Panel (Full)
+### Chunk 13 — Admin Panel ✅ COMPLETE (2026-03-01)
 Internal tooling for operating the platform.
 
-- Venue database management (add, edit, deactivate, merge duplicates)
-- Venue submission review queue (approve/reject user recommendations)
-- Venue owner verification queue
-- User management (search, suspend, delete)
-- Sports data management (override game data, manage leagues/teams)
-- Review moderation (flag/remove abusive reviews)
-- Basic analytics dashboard (active users, searches, check-ins, new venues)
+**Delivered:**
+- Middleware: `/admin/*` requires ADMIN role (unauthenticated → /signin, non-admin → /)
+- `/admin` — overview stats (users, active venues, pending recs/claims, 7d check-ins/reviews, watch events)
+- `/admin/recommendations` — approve (geocode + create venue) / reject pending recommendations
+- `/admin/claims` — approve (assign ownerId in transaction) / reject pending owner claims
+- `/admin/venues` — searchable table + toggle ACTIVE/INACTIVE status
+- `/admin/venues/new` — add venue form (geocodes address for lat/lng)
+- `/admin/venues/[id]/edit` — edit venue form with optional re-geocode
+- `/admin/users` — searchable table + make admin / remove admin / delete user
+- `/admin/reviews` — searchable table + delete review
+
+**Deferred:**
+- Sports data management (CLI-based sync already works, expose via UI later)
+- Venue merge duplicates (complex geospatial logic)
+- User suspend (needs schema change for suspended status)
+- Feedback queue (Chunk 14)
 
 ---
 
@@ -377,7 +386,7 @@ At project completion, the following must be true:
 
 *Plan created: 2026-02-27*
 *Last updated: 2026-03-01*
-*Status: Chunk 12 complete — next up: Chunk 13 (Admin Panel)*
+*Status: Chunk 13 complete — next up: Chunk 14 (In-App Product Feedback)*
 
 ---
 
