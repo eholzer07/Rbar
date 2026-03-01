@@ -145,6 +145,7 @@ Give users a home screen that shows them what matters to them.
 - `/api/venues/nearby` — PostGIS radius search (25mi default)
 - Dashboard `/` — favorites bar, Watch Tonight, Upcoming Games, Nearby Venues widget
 - Middleware updated to protect `/onboarding` and `/teams`
+- Commit `00b8bb8` pushed to `main` on GitHub (2026-03-01)
 
 ---
 
@@ -260,7 +261,20 @@ Internal tooling for operating the platform.
 
 ---
 
-### Chunk 14 — Frontend Polish, Onboarding & Marketing Page
+### Chunk 14 — In-App Product Feedback
+Let users report bugs and request features from within the app.
+
+- Feedback form accessible from all authenticated pages (floating button or nav link)
+- Submission types: Bug Report, Feature Request, General Feedback
+- Fields: type, title, description, optional screenshot upload
+- Submissions stored in DB (`Feedback` table: userId, type, title, body, screenshotUrl, status, createdAt)
+- Admin queue in the Admin Panel to view, triage, and close submissions
+- Submitter receives confirmation email; optionally notified when status changes (Resolved / Won't Fix)
+- Basic dedup: rate-limit to 5 submissions per user per 24 hours
+
+---
+
+### Chunk 15 — Frontend Polish, Onboarding & Marketing Page
 Complete the user experience for launch.
 
 - Marketing / landing page at rbar.app (before login)
@@ -272,7 +286,7 @@ Complete the user experience for launch.
 
 ---
 
-### Chunk 15 — Performance, Testing & Launch Prep
+### Chunk 16 — Performance, Testing & Launch Prep
 Validate and harden before going live.
 
 - End-to-end test suite (Playwright) for critical flows: search, signup, check-in, review
@@ -285,7 +299,7 @@ Validate and harden before going live.
 
 ---
 
-### Chunk 16 — Mobile Apps (Future Phase)
+### Chunk 17 — Mobile Apps (Future Phase)
 React Native (Expo) apps for Android and iOS, using the same REST API.
 
 - Expo project setup, shared API client with web
@@ -306,9 +320,9 @@ Phase 3 (Users):          Chunk 5 → Chunk 6
 Phase 4 (Discovery):      Chunk 7
 Phase 5 (Community):      Chunk 8 → Chunk 9 → Chunk 10
 Phase 6 (Social):         Chunk 11 → Chunk 12
-Phase 7 (Ops):            Chunk 13
-Phase 8 (Launch):         Chunk 14 → Chunk 15
-Phase 9 (Mobile):         Chunk 16
+Phase 7 (Ops):            Chunk 13 → Chunk 14
+Phase 8 (Launch):         Chunk 15 → Chunk 16
+Phase 9 (Mobile):         Chunk 17
 ```
 
 Chunk 4 (venue seeding) can run in parallel with Phases 3–4 since it's primarily a research and data-entry effort.
